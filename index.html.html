@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Business Foundation Check | Porsche Hudson</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EFE6;
+    --warm-brown: #2C1810;
+    --mid-brown: #6B3F2A;
+    --gold: #C4963A;
+    --light-gold: #E8C97A;
+    --text-dark: #1C1008;
+    --text-mid: #5C3D2E;
+    --surface: #FAF6F0;
+    --border: #E2D5C3;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background-color: var(--cream);
+    color: var(--text-dark);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 640px;
+    background: #FFFFFF;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 2px 24px rgba(44,24,16,0.07);
+  }
+
+  /* INTRO SCREEN */
+  .screen { display: none; animation: fadeUp 0.5s ease forwards; }
+  .screen.active { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .intro-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .intro-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    line-height: 1.15;
+    color: var(--warm-brown);
+    margin-bottom: 1rem;
+  }
+
+  .intro-headline em {
+    font-style: italic;
+    color: var(--mid-brown);
+  }
+
+  .intro-sub {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-mid);
+    margin-bottom: 0.75rem;
+  }
+
+  .intro-note {
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    opacity: 0.75;
+    margin-bottom: 2.5rem;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--gold);
+    margin: 1.5rem 0;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    background: var(--warm-brown);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 1rem 2.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+  }
+
+  .btn-primary:hover {
+    background: var(--mid-brown);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    background: transparent;
+    color: var(--warm-brown);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 1rem 2.5rem;
+    border: 2px solid var(--warm-brown);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .btn-secondary:hover {
+    background: var(--warm-brown);
+    color: var(--cream);
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    margin-bottom: 2.5rem;
+  }
+
+  .progress-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+  }
+
+  .progress-bar-fill {
+    height: 3px;
+    background: var(--gold);
+    transition: width 0.4s ease;
+  }
+
+  /* QUESTION */
+  .question-number {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.3rem, 4vw, 1.7rem);
+    line-height: 1.4;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  .option-btn {
+    width: 100%;
+    text-align: left;
+    padding: 1rem 1.25rem;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text-dark);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1.5;
+  }
+
+  .option-btn:hover {
+    border-color: var(--gold);
+    background: #FDF8F0;
+  }
+
+  .option-btn.selected {
+    border-color: var(--warm-brown);
+    background: var(--warm-brown);
+    color: var(--cream);
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .btn-back {
+    background: none;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    cursor: pointer;
+    padding: 0.5rem 0;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .btn-back:hover { opacity: 1; }
+
+  .btn-next {
+    background: var(--warm-brown);
+    color: var(--cream);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 0.75rem 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  .btn-next.enabled {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .btn-next.enabled:hover {
+    background: var(--mid-brown);
+  }
+
+  /* RESULT */
+  .result-tag {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+  }
+
+  .result-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+    line-height: 1.2;
+    color: var(--warm-brown);
+    margin-bottom: 1rem;
+  }
+
+  .result-body {
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: var(--text-mid);
+    margin-bottom: 1.5rem;
+  }
+
+  .result-gaps {
+    background: var(--surface);
+    border-left: 3px solid var(--gold);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .result-gaps-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.75rem;
+  }
+
+  .gap-item {
+    font-size: 0.9rem;
+    color: var(--text-mid);
+    padding: 0.35rem 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .gap-item:last-child { border-bottom: none; }
+
+  .gap-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--gold);
+    border-radius: 50%;
+    margin-top: 0.45rem;
+    flex-shrink: 0;
+  }
+
+  .cta-box {
+    background: var(--warm-brown);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-box-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .cta-box-body {
+    font-size: 0.88rem;
+    color: var(--light-gold);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-price {
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--light-gold);
+    opacity: 0.7;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .btn-cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--gold);
+    color: var(--warm-brown);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .btn-cta:hover { background: var(--light-gold); }
+
+  .restart-link {
+    display: block;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-mid);
+    opacity: 0.6;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    text-decoration: underline;
+  }
+
+  .restart-link:hover { opacity: 1; }
+
+  .footer-note {
+    text-align: center;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    opacity: 0.4;
+    margin-top: 3rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- INTRO -->
+  <div class="screen active" id="screen-intro">
+    <div class="intro-tag">Business Foundation Check</div>
+    <h1 class="intro-headline">What Did<br>You <em>Skip?</em></h1>
+    <div class="divider"></div>
+    <p class="intro-sub">Most women don't find out their foundation has gaps until it causes issues. Applying for grants, registering to receive government contracts, getting licenses. No foundation makes business harder than it has to be.</p>
+    <p class="intro-sub">This check takes less than 3 minutes. It tells you where you stand and what to handle first.</p>
+    <p class="intro-note">8 questions. No judgment.</p>
+    <button class="btn-primary" onclick="startCheck()">Take the Quiz</button>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div class="screen" id="screen-questions">
+    <div class="progress-wrap">
+      <div class="progress-label" id="progress-label">Question 1 of 8</div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-bar" style="width: 12.5%"></div>
+      </div>
+    </div>
+
+    <div class="question-number" id="q-number">01 / 08</div>
+    <div class="question-text" id="q-text"></div>
+
+    <div class="options" id="q-options"></div>
+
+    <div class="nav-row">
+      <button class="btn-back" id="btn-back" onclick="prevQuestion()">← Back</button>
+      <button class="btn-next" id="btn-next" onclick="nextQuestion()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="result-tag">Your Result</div>
+    <div class="result-headline" id="result-headline"></div>
+    <div class="result-body" id="result-body"></div>
+    <div class="result-gaps" id="result-gaps" style="display:none">
+      <div class="result-gaps-title">Areas to Address</div>
+      <div id="gaps-list"></div>
+    </div>
+    <div class="cta-box" id="cta-box">
+      <div class="cta-box-title" id="cta-title"></div>
+      <div class="cta-box-body" id="cta-body"></div>
+      <div class="cta-price" id="cta-price"></div>
+      <a class="btn-cta" id="cta-link" href="#" target="_blank" id="cta-btn"></a>
+    </div>
+    <span class="restart-link" onclick="restart()">Start over</span>
+  </div>
+
+</div>
+
+<div class="footer-note">Porsche Hudson Consulting © 2026</div>
+
+<script>
+const questions = [
+  {
+    text: "Before you registered your business, did you set up a dedicated business address?",
+    gapLabel: "Business address setup",
+    options: [
+      { label: "Yes, I had an address ready before I filed anything.", score: 1 },
+      { label: "No, I used my home address.", score: 0 },
+      { label: "I haven't registered my business yet.", score: 0 }
+    ]
+  },
+  {
+    text: "Have you used the same address consistently across your business setup: registration, banking, and any applications?",
+    gapLabel: "Consistent address across documents",
+    options: [
+      { label: "Yes, I've kept it consistent.", score: 1 },
+      { label: "Not really. I've used different addresses in different places.", score: 0 },
+      { label: "I'm not sure.", score: 0 }
+    ]
+  },
+  {
+    text: "Did you choose your business structure (LLC, sole prop, etc.) based on your specific situation, or did you just pick what seemed most popular?",
+    gapLabel: "Business structure decision",
+    options: [
+      { label: "I researched and chose based on my situation.", score: 1 },
+      { label: "I went with what I heard most people do.", score: 0 },
+      { label: "I haven't chosen a structure yet.", score: 0 }
+    ]
+  },
+  {
+    text: "Did you write any kind of business plan before registering or launching?",
+    gapLabel: "Business plan",
+    options: [
+      { label: "Yes, I had a written plan first.", score: 1 },
+      { label: "No, I figured I'd plan as I went.", score: 0 },
+      { label: "I have notes but nothing formal.", score: 0 }
+    ]
+  },
+  {
+    text: "Do you have everything you need to open and actively use a business bank account?",
+    gapLabel: "Business banking readiness",
+    options: [
+      { label: "Yes, my account is open and I use it.", score: 1 },
+      { label: "I got a separate account under my name but I don't have a true business account.", score: 0 },
+      { label: "No, I haven't set one up yet.", score: 0 }
+    ]
+  },
+  {
+    text: "If you have an LLC, do you have an Operating Agreement in place?",
+    gapLabel: "Operating Agreement",
+    options: [
+      { label: "Yes, I have one.", score: 1 },
+      { label: "No, I didn't know I needed one.", score: 0 },
+      { label: "I don't have an LLC.", score: 1 }
+    ]
+  },
+  {
+    text: "Do you have a Service Agreement ready to use with clients?",
+    gapLabel: "Service Agreement",
+    options: [
+      { label: "Yes, I have one I use with clients.", score: 1 },
+      { label: "No, I've been operating without one.", score: 0 },
+      { label: "I'm not working with clients yet.", score: 1 }
+    ]
+  },
+  {
+    text: "Have you defined your pricing and how you get paid, including which payment methods you accept?",
+    gapLabel: "Pricing and payment setup",
+    options: [
+      { label: "Yes, I have clear pricing and a payment process.", score: 1 },
+      { label: "Sort of, it's inconsistent.", score: 0 },
+      { label: "No, I haven't nailed this down yet.", score: 0 }
+    ]
+  }
+];
+
+let current = 0;
+let answers = new Array(questions.length).fill(null);
+let scores = new Array(questions.length).fill(0);
+let gapLabels = [];
+
+function startCheck() {
+  showScreen('screen-questions');
+  renderQuestion();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => {
+    s.classList.remove('active');
+    s.style.display = 'none';
+  });
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  setTimeout(() => el.classList.add('active'), 10);
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  const total = questions.length;
+
+  document.getElementById('progress-label').textContent = `Question ${current + 1} of ${total}`;
+  document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+  document.getElementById('q-number').textContent = `0${current + 1} / 0${total}`;
+  document.getElementById('q-text').textContent = q.text;
+
+  const optionsEl = document.getElementById('q-options');
+  optionsEl.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn' + (answers[current] === i ? ' selected' : '');
+    btn.textContent = opt.label;
+    btn.onclick = () => selectOption(i, opt.score);
+    optionsEl.appendChild(btn);
+  });
+
+  document.getElementById('btn-back').style.visibility = current === 0 ? 'hidden' : 'visible';
+  const nextBtn = document.getElementById('btn-next');
+  if (answers[current] !== null) {
+    nextBtn.classList.add('enabled');
+  } else {
+    nextBtn.classList.remove('enabled');
+  }
+}
+
+function selectOption(index, score) {
+  answers[current] = index;
+  scores[current] = score;
+  document.querySelectorAll('.option-btn').forEach((btn, i) => {
+    btn.classList.toggle('selected', i === index);
+  });
+  document.getElementById('btn-next').classList.add('enabled');
+}
+
+function nextQuestion() {
+  if (answers[current] === null) return;
+  if (current < questions.length - 1) {
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function prevQuestion() {
+  if (current > 0) {
+    current--;
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  gapLabels = [];
+  let total = 0;
+  scores.forEach((s, i) => {
+    total += s;
+    if (s === 0) gapLabels.push(questions[i].gapLabel);
+  });
+
+  const gaps = questions.length - total;
+
+  let headline, body, ctaTitle, ctaBody, ctaPrice, ctaLinkText, ctaHref;
+
+  if (gaps <= 2) {
+    headline = "Your foundation is in good shape.";
+    body = "You've done the work most people skip. It means when opportunities come, you're not scrambling to get your house in order first. Keep going.";
+    ctaTitle = "Want to make sure nothing slips through?";
+    ctaBody = "The BFF Toolkit gives you the templates, guides, and worksheets to keep your foundation solid as your business grows.";
+    ctaPrice = "$47 · Instant Access";
+    ctaLinkText = "Get the BFF Toolkit →";
+    ctaHref = "https://theabundanceadvocate.gumroad.com/l/cjantf";
+  } else if (gaps <= 5) {
+    headline = "You have some gaps worth addressing.";
+    body = "You've started building but there are pieces missing that could cause problems later. The good news is these are fixable. The earlier you address them, the less they cost you down the road.";
+    ctaTitle = "The BFF Toolkit was built for exactly this.";
+    ctaBody = "It walks you through the foundation pieces most women skip, with templates and guides you can use, not just read.";
+    ctaPrice = "$47 · Instant Access";
+    ctaLinkText = "Get the BFF Toolkit →";
+    ctaHref = "https://theabundanceadvocate.gumroad.com/l/cjantf";
+  } else {
+    headline = "Your foundation needs attention before you go further.";
+    body = "This isn't a judgment. I've been there. I and the women I've worked with made foundation mistakes that stood in the way of business. Taking action is key but taking the right action in the right order is strategy. Too many of us find out later when it costs more time and money to fix. You have time to do it right the first time.";
+    ctaTitle = "Let's look at this together.";
+    ctaBody = "A Business Foundation Review is a 60-minute working session where we go through your setup, find what's missing, and map out what to handle first. You leave with a clear picture and no more guessing.";
+    ctaPrice = "$97 · 60 Minutes · One focused conversation";
+    ctaLinkText = "Book Your Session →";
+    ctaHref = "https://calendar.google.com";
+  }
+
+  document.getElementById('result-headline').textContent = headline;
+  document.getElementById('result-body').textContent = body;
+  document.getElementById('cta-title').textContent = ctaTitle;
+  document.getElementById('cta-body').textContent = ctaBody;
+  document.getElementById('cta-price').textContent = ctaPrice;
+  document.getElementById('cta-link').textContent = ctaLinkText;
+  document.getElementById('cta-link').href = ctaHref;
+
+  if (gapLabels.length > 0) {
+    const gapsEl = document.getElementById('gaps-list');
+    gapsEl.innerHTML = '';
+    gapLabels.forEach(label => {
+      gapsEl.innerHTML += `<div class="gap-item"><div class="gap-dot"></div><span>${label}</span></div>`;
+    });
+    document.getElementById('result-gaps').style.display = 'block';
+  }
+
+  showScreen('screen-result');
+}
+
+function restart() {
+  current = 0;
+  answers = new Array(questions.length).fill(null);
+  scores = new Array(questions.length).fill(0);
+  gapLabels = [];
+  showScreen('screen-intro');
+}
+</script>
+</body>
+</html>
