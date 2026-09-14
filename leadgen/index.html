@@ -1,1 +1,72 @@
-
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lead Generation Method Tool</title>
+<style>body{font-family:Arial,sans-serif;background:#f6f7f9;color:#07111F;margin:0}.w{max-width:720px;margin:auto;padding:24px}.c{background:#fff;padding:26px;border-radius:16px}h1{font-size:28px}.o,.b{display:block;width:100%;padding:13px;margin:9px 0;border-radius:9px;font-size:16px}.o{background:white;border:1px solid #ccd3da;text-align:left}.o.s{border:2px solid #1679A2;background:#eef8fc}.b{border:0;background:#1679A2;color:white}.back{background:white;color:#07111F;border:1px solid #ccd3da}.hide{display:none}.r{border:1px solid #ddd;padding:14px;border-radius:10px;margin:10px 0}.micro{background:#f2f5f7;padding:17px;border-radius:10px;margin-top:16px;line-height:1.5}</style></head>
+<body><div class="w"><div class="c">
+<div id="intro"><h1>Which Lead Generation Method Fits Your Business?</h1><p>Answer questions about your business and current circumstances. You may have more than one strong match. If you do, you choose where to start.</p><button class="b" onclick="start()">Start</button></div>
+<div id="quiz" class="hide"><p id="prog"></p><h2 id="q"></h2><div id="opts"></div><button class="b" onclick="next()">Next</button><button class="o back" onclick="back()">Back</button></div>
+<div id="results" class="hide"><h1>Your strongest match<span id="pl"></span></h1><p>This gives you a reasonable place to start testing. It cannot tell you with certainty which method will work.</p><div id="cards"></div><p id="choose"></p><div id="buttons"></div><div id="micro" class="micro hide"></div><button class="o back" onclick="restart()">Retake</button></div>
+</div></div>
+<script>
+const M={
+direct:["Direct","You actively reach out to potential customers through email, DMs, calls, or other forms of direct contact."],
+relationship:["Relationship","You generate leads through people, communities, referrals, networking, collaborations, and partnerships."],
+content:["Content","You create useful or interesting content that helps potential customers discover you and gives them a reason to stay connected."],
+paid:["Paid","You pay to put an offer or lead-generating message in front of potential customers."]
+};
+const Q=[
+["Can you identify specific people or businesses that could potentially need what you sell?",["direct"]],
+["Would you be comfortable reaching out to someone you think could genuinely benefit from what you sell, even if you haven't met them before?",["direct"]],
+["Are you able to spend some time regularly finding potential customers and reaching out to them individually?",["direct"]],
+["Does what you sell give you a natural reason to start a conversation with a potential customer?",["direct"]],
+["Do you already know people who could potentially buy from you or introduce you to someone who might?",["relationship"]],
+["Are you part of any communities, professional groups, local networks, online groups, or other spaces where you regularly interact with people?",["relationship"]],
+["Would you be comfortable telling people you already know what you offer and asking them to keep you in mind when someone needs it?",["relationship"]],
+["Could you identify businesses or people who serve a similar audience without directly competing with you?",["relationship"]],
+["Are there questions, problems, or topics related to what you sell that you could regularly talk about or explain?",["content"]],
+["Would you be comfortable creating content such as posts, videos, emails, articles, or other useful information to help potential customers discover you?",["content"]],
+["Can you realistically make time to create content consistently, even if you start small?",["content"]],
+["Are you willing to make content with the understanding that it is something you build over time, and will not immediately produce a customer?",["content"]],
+["Do you have money you can comfortably afford to spend testing paid advertising right now, knowing some of that money may not produce sales?",["paid"]]
+];
+const R={
+direct:"<b>Direct: First Outreach Test</b><br><br>Choose a specific type of person or business that may need your offer. Identify why your offer could be relevant to them. Choose one direct contact method. Personalize the contact instead of sending the same generic message to everyone.<br><br><b>Track:</b> contacts, replies, conversations, and sales.",
+relationship:"<b>Relationship: Referral & Connection Test</b><br><br>List people, communities, or businesses already connected to you or the people you serve. Choose the strongest potential connections. Make it easy for them to understand what you do and who it helps. Ask for an introduction, referral, conversation, or relevant connection.<br><br><b>Track:</b> asks, introductions, conversations, and sales.",
+content:"<b>Content: Lead-Generating Content Test</b><br><br>Choose one problem or question your potential customer has. Create one useful piece of content around it. Give the person a clear next step to stay connected or learn more about your offer.<br><br><b>Track:</b> reach, responses, clicks or sign-ups, conversations, and sales.",
+paid:"<b>Paid: Paid Lead Test</b><br><br>Use an offer that is already getting sales. Be clear about who you want to reach. Send the ad to a working place where the person can become a lead or buy. Set the amount you can afford to test before starting.<br><br><b>Track:</b> ad response, leads, sales, and money spent."
+};
+let i=0,A=Array(Q.length).fill(null);
+function start(){
+document.getElementById("intro").classList.add("hide");
+document.getElementById("quiz").classList.remove("hide");
+render();
+}
+function render(){
+document.getElementById("prog").textContent=`Question ${i+1} of ${Q.length}`;
+document.getElementById("q").textContent=Q[i][0];
+document.getElementById("opts").innerHTML=["Yes","No"].map((x,j)=>`<button class="o ${A[i]===j?"s":""}" onclick="pick(${j})">${x}</button>`).join("");
+}
+function pick(j){A[i]=j;render()}
+function next(){
+if(A[i]===null){alert("Choose an answer first.");return}
+if(i===12 && A[i]===1){finish();return}
+if(i<Q.length-1){i++;render()}else finish()
+}
+function back(){if(i>0){i--;render()}}
+function finish(){let s={direct:0,relationship:0,content:0,paid:0};A.forEach((v,n)=>{if(v===0)Q[n][1].forEach(k=>s[k]++)});if(A[12]===1)delete s.paid;let mx=Math.max(...Object.values(s)),w=Object.keys(s).filter(k=>s[k]===mx);document.getElementById("quiz").classList.add("hide");
+document.getElementById("results").classList.remove("hide");
+document.getElementById("pl").textContent=w.length>1?"es":"";
+document.getElementById("cards").innerHTML=w.map(k=>`<div class="r"><b>${M[k][0]}</b><p>${M[k][1]}</p></div>`).join("");
+document.getElementById("choose").textContent=w.length>1?"You have more than one strong fit. Choose the one you want to start with:":"Choose your method to open its next-step resource:";
+document.getElementById("buttons").innerHTML=w.map(k=>`<button class="b" onclick="openR('${k}')">Start with ${M[k][0]}</button>`).join("")}
+function openR(k){
+const el=document.getElementById("micro");
+el.innerHTML=R[k];
+el.classList.remove("hide");
+el.scrollIntoView({behavior:"smooth"});
+}
+function restart(){
+i=0;A=Array(Q.length).fill(null);
+document.getElementById("results").classList.add("hide");
+document.getElementById("micro").classList.add("hide");
+document.getElementById("intro").classList.remove("hide");
+}
+</script></body></html>
